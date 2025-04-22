@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -31,6 +32,7 @@ public class VeterinariaFacturacion {
     @Column(name = "nombre_mascota")
     private String nombre_mascota;
 
+    @Pattern(regexp = "^[0-9,$]*$")
     @Column(name = "edad_mascota")
     private int edad_mascota;
 
