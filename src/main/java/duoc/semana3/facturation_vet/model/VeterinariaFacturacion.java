@@ -22,6 +22,7 @@ public class VeterinariaFacturacion {
 
     @NotNull
     @Size(max=12)
+    @Pattern(regexp = "^([0-2][0-9]|3[0-1])(\\/|-)(0[1-9]|1[0-2])\\2(\\d{4})$")
     @Column(name = "fecha_factura")
     private String fecha_factura;
 
@@ -32,7 +33,6 @@ public class VeterinariaFacturacion {
     @Column(name = "nombre_mascota")
     private String nombre_mascota;
 
-    @Pattern(regexp = "^[0-9,$]*$")
     @Column(name = "edad_mascota")
     private int edad_mascota;
 
