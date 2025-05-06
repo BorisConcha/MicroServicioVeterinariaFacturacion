@@ -1,5 +1,7 @@
 package duoc.semana3.facturation_vet.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "facturacionveterinaria")
-public class VeterinariaFacturacion {
+public class VeterinariaFacturacion extends RepresentationModel<VeterinariaFacturacion> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facturacion_seq")
     @SequenceGenerator(name = "facturacion_seq", sequenceName = "facturacion_seq", allocationSize = 1)
