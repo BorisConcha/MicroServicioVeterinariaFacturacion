@@ -3,6 +3,8 @@ package duoc.semana3.facturation_vet.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -104,4 +106,103 @@ public class VeterinariaFacturacionControllerTest {
         assertTrue(response.getLinks().hasLink("self"));
 
     }
+
+    @Test
+    public void createFacturaTest() {
+
+        VeterinariaFacturacion facturaRequest = new VeterinariaFacturacion();
+        facturaRequest.setFechaFactura("15/10/2021");
+        facturaRequest.setNombreVeterinario("Dr.Doe");
+        facturaRequest.setNombreMascota("Zeus");
+        facturaRequest.setEdadMascota(2);
+        facturaRequest.setGeneroMascota("Masculino");
+        facturaRequest.setTipoServicio("Vacuna");
+        facturaRequest.setDescripcionServicio("Se le coloco una vacuna de prueba");
+        
+        VeterinariaFacturacion facturaCreada = new VeterinariaFacturacion();
+        facturaCreada.setIdFacturacion(1L);
+        facturaCreada.setFechaFactura("15/10/2021");
+        facturaCreada.setNombreVeterinario("Dr.Doe");
+        facturaCreada.setNombreMascota("Zeus");
+        facturaCreada.setEdadMascota(2);
+        facturaCreada.setGeneroMascota("Masculino");
+        facturaCreada.setTipoServicio("Vacuna");
+        facturaCreada.setDescripcionServicio("Se le coloco una vacuna de prueba");
+        
+        when(veterinariaFacturacionService.createFactura(any(VeterinariaFacturacion.class))).thenReturn(facturaCreada);
+        
+        EntityModel<VeterinariaFacturacion> response = veterinariaFactuacionController.createFactura(facturaRequest);
+        
+        verify(veterinariaFacturacionService).createFactura(any(VeterinariaFacturacion.class));
+        
+        assertNotNull(response);
+        assertNotNull(response.getContent());
+        
+        VeterinariaFacturacion resultado = response.getContent();
+        assertEquals(1L, resultado.getIdFacturacion());
+        assertEquals("15/10/2021", resultado.getFechaFactura());
+        assertEquals("Dr.Doe", resultado.getNombreVeterinario());
+        assertEquals("Zeus", resultado.getNombreMascota());
+        assertEquals(2, resultado.getEdadMascota());
+        assertEquals("Masculino", resultado.getGeneroMascota());
+        assertEquals("Vacuna", resultado.getTipoServicio());
+        assertEquals("Se le coloco una vacuna de prueba", resultado.getDescripcionServicio());
+
+        
+        assertTrue(response.hasLinks());
+        assertNotNull(response.getLink("self").orElse(null));
+        assertNotNull(response.getLink("all-facturas").orElse(null));
+    }
+
+    @Test
+    public void updateFacturaTest() {
+
+        VeterinariaFacturacion facturaActualizada = new VeterinariaFacturacion();
+        facturaActualizada.setIdFacturacion(1L);
+        facturaActualizada.setFechaFactura("01/01/2025");
+        facturaActualizada.setNombreVeterinario("Dr.John");
+        facturaActualizada.setNombreMascota("Cachito");
+        facturaActualizada.setEdadMascota(1);
+        facturaActualizada.setGeneroMascota("Femenino");
+        facturaActualizada.setTipoServicio("Vacuna");
+        facturaActualizada.setDescripcionServicio("Se le coloco una vacuna de prueba");
+        
+        VeterinariaFacturacion facturaOriginal = new VeterinariaFacturacion();
+        facturaOriginal.setIdFacturacion(1L);
+        facturaOriginal.setFechaFactura("15/10/2021");
+        facturaOriginal.setNombreVeterinario("Dr.Doe");
+        facturaOriginal.setNombreMascota("Zeus");
+        facturaOriginal.setEdadMascota(2);
+        facturaOriginal.setGeneroMascota("Masculino");
+        facturaOriginal.setTipoServicio("Vacuna");
+        facturaOriginal.setDescripcionServicio("Se le coloco una vacuna de prueba");
+        
+        when(veterinariaFacturacionService.getFacturasbyId(1L)).thenReturn(Optional.of(facturaOriginal));
+        
+        when(veterinariaFacturacionService.updateFactura(eq(1L), any(VeterinariaFacturacion.class))).thenReturn(facturaActualizada);
+        
+        EntityModel<VeterinariaFacturacion> response = veterinariaFactuacionController.updateFactura(1L, facturaActualizada);
+        
+        verify(veterinariaFacturacionService).updateFactura(eq(1L), any(VeterinariaFacturacion.class));
+        
+        assertNotNull(response);
+        assertNotNull(response.getContent());
+        
+        VeterinariaFacturacion resultado = response.getContent();
+        assertEquals(1L, resultado.getIdFacturacion());
+        assertEquals("01/01/2025", resultado.getFechaFactura());
+        assertEquals("Dr.John", resultado.getNombreVeterinario());
+        assertEquals("Cachito", resultado.getNombreMascota());
+        assertEquals(1, resultado.getEdadMascota());
+        assertEquals("Femenino", resultado.getGeneroMascota());
+        assertEquals("Vacuna", resultado.getTipoServicio());
+        assertEquals("Se le coloco una vacuna de prueba", resultado.getDescripcionServicio());
+        
+        assertTrue(response.hasLinks());
+        assertNotNull(response.getLink("self").orElse(null));
+        assertNotNull(response.getLink("all-facturas").orElse(null));
+
+    }
+
+
 }
